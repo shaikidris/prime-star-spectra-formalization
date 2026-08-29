@@ -48,7 +48,8 @@ the repository root and the Comparator configuration path is
 
 ## Reproducibility
 
-The project is pinned to Lean/mathlib `v4.32.2` and
+The project is pinned to Lean `v4.32.0`, Mathlib commit
+`3dffaf2f18b47d11948f6390838ea6f2ae662aaf`, and
 `PrimeNumberTheoremAnd` commit
 `7715064f690d0689f30889846f4e2c5e7ec0c47e`.
 
