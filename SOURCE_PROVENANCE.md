@@ -20,7 +20,9 @@ Mathlib and all transitive Git dependencies are pinned in
 [`lake-manifest.json`](lake-manifest.json). Their exact revisions are build
 inputs rather than alternative substantive formalizations.
 
-The Palomar compatibility port changes only the Lean toolchain and Mathlib
-dependency pins. The theorem statements, proofs, Challenge, Solution, and
+The Palomar compatibility port changes the Lean toolchain and Mathlib dependency
+pins. Its Challenge/Solution adapter also uses the same explicit named adjacency
+decision instance on both sides so Comparator sees definitionally identical
+constants. The selected mathematical statement, substantive proof modules, and
 Comparator selection are unchanged from the authoritative substantive source
 commit above.
