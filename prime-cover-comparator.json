@@ -1,0 +1,16 @@
+{
+  "challenge_module": "PrimeCoverChallenge",
+  "solution_module": "PrimeCoverSolution",
+  "theorem_names": [
+    "PrimeStar.palomar_uniform_finite_prime_sum"
+  ],
+  "definition_names": [
+    "PrimeStar.palomarAllowedPrimeInvSubOneSum"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the accompanying preprint."
+title: "Prime-star spectra in Lean 4"
+type: software
+authors:
+  - family-names: "Shaik"
+    given-names: "Idris Ali"
+date-released: 2026-08-29
+license: Apache-2.0
+references:
+  - type: article
+    title: "Prime-Star Localization and Second-Order Spectra of Finite Divisibility Cover Graphs"
+    authors:
+      - family-names: "Shaik"
+        given-names: "Idris Ali"
+    date-published: 2026-08-28
+    doi: 10.5281/zenodo.22163492
+    url: "https://doi.org/10.5281/zenodo.22163492"
