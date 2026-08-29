@@ -92,7 +92,12 @@ fidelity:
   divergences: >-
     No mathematical divergence is known for the selected result. The Lean
     statement uses natural cutoffs X, the finite graph's exact arithmetic rank,
-    and an epsilon-delta formulation of the manuscript's uniform o(1).
+    and an epsilon-delta formulation of the manuscript's uniform o(1). The
+    authoritative substantive source is
+    https://github.com/shaikidris/prime-star-spectra-formalization at commit
+    e40d375396f2965757600d7e0351ccdb69423c9b. This submitted snapshot is a
+    toolchain-only compatibility port: theorem statements, proofs, Challenge,
+    Solution, and Comparator selection are unchanged.
 
 review:
   status: "self-assessed and machine-checked; independent human expert review pending"

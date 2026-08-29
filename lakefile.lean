@@ -14,7 +14,8 @@ require PrimeNumberTheoremAnd from git
 
 -- Keep the root mathlib pin last so its transitive dependency revisions win.
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "v4.32.2"
+  "https://github.com/leanprover-community/mathlib4.git" @
+    "3dffaf2f18b47d11948f6390838ea6f2ae662aaf"
 
 @[default_target]
 lean_lib PrimeStar where
