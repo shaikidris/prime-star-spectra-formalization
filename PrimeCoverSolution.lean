@@ -20,7 +20,7 @@ def palomarArithmeticRankIndex {S : Finset ℕ} {X : ℕ} (a : Vertex S X) :
     simp [T] at ha
   simpa using Finset.card_lt_card hproper
 
-noncomputable local instance (S : Finset ℕ) (X : ℕ) :
+noncomputable instance palomarPrimeCoverDecidableRel (S : Finset ℕ) (X : ℕ) :
     DecidableRel (primeCoverGraph S X).Adj := Classical.decRel _
 
 noncomputable def palomarAdjacency (S : Finset ℕ) (X : ℕ) :

@@ -1,4 +1,10 @@
-import Mathlib
+import Mathlib.Combinatorics.SimpleGraph.AdjMatrix
+import Mathlib.Combinatorics.SimpleGraph.LapMatrix
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.NumberTheory.PrimeCounting
+import Mathlib.Topology.Instances.Nat
+import Mathlib.Analysis.InnerProductSpace.Spectrum
+import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
 # Uniform finite-prime-sum spectrum of finite prime-cover graphs
@@ -27,6 +33,9 @@ namespace Vertex
 instance (S : Finset ℕ) (X : ℕ) : CoeOut (Vertex S X) ℕ :=
   ⟨fun n ↦ n.1.1⟩
 
+theorem coe_pos {S : Finset ℕ} {X : ℕ} (n : Vertex S X) : 0 < (n : ℕ) :=
+  n.2.1
+
 end Vertex
 
 /-- Two allowed vertices differ by multiplication by one allowed prime. -/
@@ -34,22 +43,27 @@ def PrimeCoverAdj {S : Finset ℕ} {X : ℕ} (m n : Vertex S X) : Prop :=
   ∃ p : ℕ, p.Prime ∧ p ∉ S ∧
     (((m : ℕ) * p = (n : ℕ)) ∨ ((n : ℕ) * p = (m : ℕ)))
 
+theorem primeCoverAdj_symm {S : Finset ℕ} {X : ℕ} {m n : Vertex S X} :
+    PrimeCoverAdj m n → PrimeCoverAdj n m := by
+  rintro ⟨p, hp, hpS, h | h⟩
+  · exact ⟨p, hp, hpS, Or.inr h⟩
+  · exact ⟨p, hp, hpS, Or.inl h⟩
+
+theorem not_primeCoverAdj_self {S : Finset ℕ} {X : ℕ} (m : Vertex S X) :
+    ¬PrimeCoverAdj m m := by
+  rintro ⟨p, hp, _hpS, h | h⟩
+  all_goals
+    have hmul : (m : ℕ) * p = (m : ℕ) * 1 := by simpa using h
+    have hp1 : p = 1 := Nat.eq_of_mul_eq_mul_left (Vertex.coe_pos m) hmul
+    exact hp.ne_one hp1
+
 /-- The finite prime-cover graph. -/
 def primeCoverGraph (S : Finset ℕ) (X : ℕ) : SimpleGraph (Vertex S X) where
   Adj := PrimeCoverAdj
-  symm := ⟨by
-    rintro m n ⟨p, hp, hpS, h | h⟩
-    · exact ⟨p, hp, hpS, Or.inr h⟩
-    · exact ⟨p, hp, hpS, Or.inl h⟩⟩
-  loopless := ⟨by
-    intro m
-    rintro ⟨p, hp, _hpS, h | h⟩
-    all_goals
-      have hm : (m : ℕ) * p = (m : ℕ) * 1 := by simpa using h
-      have hp1 : p = 1 := Nat.eq_of_mul_eq_mul_left m.2.1 hm
-      exact hp.ne_one hp1⟩
+  symm := ⟨fun _ _ h ↦ primeCoverAdj_symm (S := S) (X := X) h⟩
+  loopless := ⟨fun m ↦ not_primeCoverAdj_self (S := S) (X := X) m⟩
 
-noncomputable local instance (S : Finset ℕ) (X : ℕ) :
+noncomputable instance palomarPrimeCoverDecidableRel (S : Finset ℕ) (X : ℕ) :
     DecidableRel (primeCoverGraph S X).Adj := Classical.decRel _
 
 /-- `pi_S(N)`, the number of primes at most `N` not deleted by `S`. -/

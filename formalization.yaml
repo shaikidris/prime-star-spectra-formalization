@@ -96,8 +96,9 @@ fidelity:
     authoritative substantive source is
     https://github.com/shaikidris/prime-star-spectra-formalization at commit
     e40d375396f2965757600d7e0351ccdb69423c9b. This submitted snapshot is a
-    toolchain-only compatibility port: theorem statements, proofs, Challenge,
-    Solution, and Comparator selection are unchanged.
+    toolchain compatibility port with a definitionally synchronized Palomar
+    Challenge/Solution adapter. The selected mathematical statement,
+    substantive proof modules, and Comparator selection are unchanged.
 
 review:
   status: "self-assessed and machine-checked; independent human expert review pending"
