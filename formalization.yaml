@@ -2,15 +2,15 @@
 version: "v0.4"
 
 project:
-  name: "Uniform finite-prime-sum spectra of finite prime-cover graphs"
+  name: "Top and uniform finite-prime-sum spectra of finite prime-cover graphs"
   description: >-
     A Lean 4 formalization of the ordered adjacency spectrum of finite
-    prime-cover graphs. For every fixed finite set S of deleted primes and
-    epsilon > 0, uniformly over allowed centres
-    a <= (log X)^(1/2-epsilon), it proves that the square of the eigenvalue
-    at the arithmetic rank j(a) equals pi_S(X/a) plus four times the finite
-    allowed-prime sum of 1/(p-1), plus c(a) + o(1). This is the manuscript's
-    elementary finite-sum form of its uniform constant-layer theorem.
+    prime-cover graphs. Its root-centred specialization proves that the
+    square of the largest ordered eigenvalue equals pi(X) plus four times
+    the finite prime sum of 1/(p-1), up to o(1). More generally, for every
+    fixed finite set S of deleted primes and epsilon > 0, the same law with
+    the explicit centre correction c(a) holds uniformly over allowed centres
+    a <= (log X)^(1/2-epsilon).
   authors:
     - "Idris Ali Shaik"
   license: "Apache-2.0"
@@ -49,8 +49,9 @@ sources:
 
 status:
   scope: >-
-    The compared declaration is the full uniform finite-prime-sum form of
-    manuscript Theorem 9.6, for natural cutoffs X and finite deletion sets S.
+    The compared declarations are the undeleted root-centred headline and the
+    full uniform finite-prime-sum form of manuscript Theorem 9.6, for natural
+    cutoffs X and finite deletion sets S.
     The submitted proof development also contains the finite star
     decomposition, perturbation, localization, first-exit, quantitative PNT,
     and prime-Mertens layers used in the proof. The Comparator selection does
@@ -60,6 +61,11 @@ status:
   axioms: [propext, Classical.choice, Quot.sound]
   main_results:
     - declaration: "PrimeStar.palomar_uniform_finite_prime_sum"
+      file: "PrimeCoverSolution.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: "prime-cover-comparator.json"
+    - declaration: "PrimeStar.palomar_top_finite_prime_sum"
       file: "PrimeCoverSolution.lean"
       sorry_count: 0
       axioms: [propext, Classical.choice, Quot.sound]
@@ -113,6 +119,14 @@ review:
 alignment:
   namespace: "PrimeStar"
   statements:
+    - source: "Manuscript headline (undeleted root-centred form)"
+      lean: "PrimeStar.palomar_top_finite_prime_sum"
+      module: "PrimeCoverChallenge"
+      status: "proved"
+      note: >-
+        This is the a=1, S=empty specialization. The root has arithmetic rank
+        one, so its zero-based ordered spectral index is zero; the centre
+        correction vanishes and allowedPrimeCount is Nat.primeCounting.
     - source: "Manuscript headline and Theorem 9.6 (finite-prime-sum form)"
       lean: "PrimeStar.palomar_uniform_finite_prime_sum"
       module: "PrimeCoverChallenge"

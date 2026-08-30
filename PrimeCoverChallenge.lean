@@ -116,6 +116,22 @@ noncomputable def palomarLambdaAtArithmeticRank
   (palomarAdjacency_isSymmetric S X).eigenvalues rfl
     (palomarArithmeticRankIndex a)
 
+/-- The root vertex `1` of the undeleted prime-cover graph. -/
+def palomarRootVertex (X : ℕ) (hX : 1 ≤ X) : Vertex ∅ X :=
+  ⟨⟨1, Nat.lt_succ_iff.mpr hX⟩, by simp⟩
+
+@[simp]
+theorem palomarRootVertex_coe (X : ℕ) (hX : 1 ≤ X) :
+    (palomarRootVertex X hX : ℕ) = 1 := rfl
+
+/-- The largest ordered adjacency eigenvalue of the undeleted graph.
+
+The positive root vertex has arithmetic rank one, hence zero-based ordered
+spectral index zero.
+-/
+noncomputable def palomarLargestEigenvalue (X : ℕ) (hX : 1 ≤ X) : ℝ :=
+  palomarLambdaAtArithmeticRank (palomarRootVertex X hX)
+
 /-- Uniform finite-prime-sum spectrum of finite prime-cover graphs.
 
 For fixed finite `S` and `epsilon > 0`, uniformly over allowed centres
@@ -132,6 +148,18 @@ theorem palomar_uniform_finite_prime_sum
           - (allowedPrimeCount S (X / (a : ℕ)) : ℝ)
           - 4 * palomarAllowedPrimeInvSubOneSum S X
           - centerPrimeCorrection (a : ℕ)| < δ := by
+  sorry
+
+/-- Root-centred specialization of `palomar_uniform_finite_prime_sum`.
+
+For the undeleted graph, the square of the largest ordered adjacency
+eigenvalue equals `π(X) + 4 * ∑_{p ≤ X} 1/(p-1) + o(1)`.
+-/
+theorem palomar_top_finite_prime_sum :
+    ∀ δ > 0, ∀ᶠ X : ℕ in atTop, ∀ hX : 1 ≤ X,
+      |(palomarLargestEigenvalue X hX) ^ 2
+        - (Nat.primeCounting X : ℝ)
+        - 4 * palomarAllowedPrimeInvSubOneSum ∅ X| < δ := by
   sorry
 
 end PrimeStar
