@@ -384,3 +384,5 @@ import PrimeStar.Main
 #print axioms PrimeStar.finiteAllowedPrimeInvSubOneSum_eq
 #print axioms PrimeStar.tendsto_finiteAllowedPrimeInvSubOneSum_sub_log
 #print axioms PrimeStar.eventually_logarithmicWindow_ranked_finitePrimeSum_proved
+#print axioms PrimeStar.eventually_logarithmicWindow_actualCorrection_frequency_bound
+#print axioms PrimeStar.eventually_logarithmicWindow_starPair_dynamics_with_actualCorrection

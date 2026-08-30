@@ -3,11 +3,19 @@
   "solution_module": "PrimeCoverSolution",
   "theorem_names": [
     "PrimeStar.palomar_uniform_finite_prime_sum",
-    "PrimeStar.palomar_top_finite_prime_sum"
+    "PrimeStar.palomar_top_finite_prime_sum",
+    "PrimeStar.palomar_uniform_explicit_frequency_dynamics"
   ],
   "definition_names": [
     "PrimeStar.palomarAllowedPrimeInvSubOneSum",
-    "PrimeStar.palomarLargestEigenvalue"
+    "PrimeStar.palomarLargestEigenvalue",
+    "PrimeStar.palomarFirstExitCorrection",
+    "PrimeStar.palomarApproximateFrequency",
+    "PrimeStar.palomarPrimeStarCentre",
+    "PrimeStar.palomarPrimeStarShell",
+    "PrimeStar.palomarPrimeCoverEvolution",
+    "PrimeStar.palomarLocalizationBound",
+    "PrimeStar.palomarFeshbachRemainderConstant"
   ],
   "permitted_axioms": [
     "propext",

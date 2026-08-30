@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "Top and uniform finite-prime-sum spectra of finite prime-cover graphs"
+  name: "Uniform finite-prime-sum spectra and dynamics of finite prime-cover graphs"
   description: >-
     A Lean 4 formalization of the ordered adjacency spectrum of finite
     prime-cover graphs. Its root-centred specialization proves that the
@@ -10,7 +10,9 @@ project:
     the finite prime sum of 1/(p-1), up to o(1). More generally, for every
     fixed finite set S of deleted primes and epsilon > 0, the same law with
     the explicit centre correction c(a) holds uniformly over allowed centres
-    a <= (log X)^(1/2-epsilon).
+    a <= (log X)^(1/2-epsilon). The same window admits a uniform
+    centre--shell evolution theorem at the explicit first-exit frequency,
+    with a finite localization-plus-phase error bound.
   authors:
     - "Idris Ali Shaik"
   license: "Apache-2.0"
@@ -27,11 +29,13 @@ sources:
       - "Idris Ali Shaik"
     id: "https://doi.org/10.5281/zenodo.22163492"
     type: "paper"
-    location: "Theorem 9.6 (equivalent finite-prime-sum form)"
+    location: "Theorem 9.6 (equivalent finite-prime-sum form) and Corollary 9.9"
     relationship: "formalizes"
     note: >-
-      The selected declaration formalizes the uniform theorem in the
-      finite-prime-sum form used by the manuscript's headline. The same
+      The selected declarations formalize the uniform theorem in the
+      finite-prime-sum form used by the manuscript's headline, its top-mode
+      specialization, and the finite explicit-frequency estimate underlying
+      Corollary 9.9. The same
       preprint is also available at SSRN 7364645,
       https://doi.org/10.2139/ssrn.7364645.
     license: "CC-BY-4.0"
@@ -49,13 +53,14 @@ sources:
 
 status:
   scope: >-
-    The compared declarations are the undeleted root-centred headline and the
-    full uniform finite-prime-sum form of manuscript Theorem 9.6, for natural
-    cutoffs X and finite deletion sets S.
+    The compared declarations are the undeleted root-centred headline, the
+    full uniform finite-prime-sum form of manuscript Theorem 9.6, and the
+    finite explicit-frequency dynamics bound underlying Corollary 9.9, for
+    natural cutoffs X and finite deletion sets S.
     The submitted proof development also contains the finite star
     decomposition, perturbation, localization, first-exit, quantitative PNT,
     and prime-Mertens layers used in the proof. The Comparator selection does
-    not advertise the manuscript's other corollaries as separate results.
+    not advertise the manuscript's remaining corollaries as separate results.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: [propext, Classical.choice, Quot.sound]
@@ -66,6 +71,11 @@ status:
       axioms: [propext, Classical.choice, Quot.sound]
       comparator_config: "prime-cover-comparator.json"
     - declaration: "PrimeStar.palomar_top_finite_prime_sum"
+      file: "PrimeCoverSolution.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: "prime-cover-comparator.json"
+    - declaration: "PrimeStar.palomar_uniform_explicit_frequency_dynamics"
       file: "PrimeCoverSolution.lean"
       sorry_count: 0
       axioms: [propext, Classical.choice, Quot.sound]
@@ -96,15 +106,18 @@ automation:
 
 fidelity:
   divergences: >-
-    No mathematical divergence is known for the selected result. The Lean
-    statement uses natural cutoffs X, the finite graph's exact arithmetic rank,
-    and an epsilon-delta formulation of the manuscript's uniform o(1). The
-    authoritative substantive source is
+    No mathematical divergence is known for the selected results. The Lean
+    eigenvalue statement uses natural cutoffs X, the finite graph's exact
+    arithmetic rank, and an epsilon-delta formulation of the manuscript's
+    uniform o(1). The dynamics declaration states the finite explicit bound
+    from which the manuscript's time-window asymptotic follows. The inherited
+    substantive source is
     https://github.com/shaikidris/prime-star-spectra-formalization at commit
     e40d375396f2965757600d7e0351ccdb69423c9b. This submitted snapshot is a
     toolchain compatibility port with a definitionally synchronized Palomar
-    Challenge/Solution adapter. The selected mathematical statement,
-    substantive proof modules, and Comparator selection are unchanged.
+    Challenge/Solution adapter. Version 2 adds the root specialization and a
+    project-local explicit-frequency dynamics module to that inherited proof
+    cone, and selects all three results in one Comparator entry.
 
 review:
   status: "self-assessed and machine-checked; independent human expert review pending"
@@ -137,6 +150,17 @@ alignment:
         PrimeStar.eventually_logarithmicWindow_ranked_finitePrimeSum_proved;
         the exact partial-fraction identity and prime-Mertens limit connect
         this form to the constant-layer theorem.
+    - source: "Corollary 9.9 (explicit-frequency centre--shell dynamics)"
+      lean: "PrimeStar.palomar_uniform_explicit_frequency_dynamics"
+      module: "PrimeCoverChallenge"
+      status: "proved"
+      note: >-
+        The Challenge states the finite uniform norm bound at frequency
+        sqrt(pi_S(X/a) + M_{S,a,X}). The right-hand side is the sum of the
+        logarithmic-window localization bound and the Lipschitz phase error
+        obtained from the source-weighted Feshbach remainder. This is the
+        quantitative finite statement underlying the manuscript's o(1)
+        dynamics on its stated time scale.
 
 acknowledgements: >-
   The formalization uses Lean 4, Mathlib, and the PrimeNumberTheoremAnd

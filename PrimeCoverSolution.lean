@@ -47,6 +47,44 @@ theorem palomarRootVertex_coe (X : ℕ) (hX : 1 ≤ X) :
 noncomputable def palomarLargestEigenvalue (X : ℕ) (hX : 1 ≤ X) : ℝ :=
   palomarLambdaAtArithmeticRank (palomarRootVertex X hX)
 
+noncomputable def palomarFirstExitCorrection
+    (S : Finset ℕ) (X : ℕ) (a : Vertex S X) : ℝ :=
+  fixedCenterActualCorrection S (a : ℕ) X
+
+noncomputable def palomarApproximateFrequency
+    (S : Finset ℕ) (X : ℕ) (a : Vertex S X) : ℝ :=
+  logarithmicWindowApproximateFrequency S X a
+
+noncomputable def palomarPrimeStarCentre
+    (S : Finset ℕ) (X : ℕ) (a : Vertex S X) :
+    EuclideanSpace ℂ (Vertex S X) :=
+  normalizedPairCentre
+    (complexifyEuclidean
+      (largePrimeNormalizedStarMode S X (Nat.sqrt X) a 1))
+    (complexifyEuclidean
+      (largePrimeNormalizedStarMode S X (Nat.sqrt X) a (-1)))
+
+noncomputable def palomarPrimeStarShell
+    (S : Finset ℕ) (X : ℕ) (a : Vertex S X) :
+    EuclideanSpace ℂ (Vertex S X) :=
+  normalizedPairShell
+    (complexifyEuclidean
+      (largePrimeNormalizedStarMode S X (Nat.sqrt X) a 1))
+    (complexifyEuclidean
+      (largePrimeNormalizedStarMode S X (Nat.sqrt X) a (-1)))
+
+noncomputable def palomarPrimeCoverEvolution
+    (S : Finset ℕ) (X : ℕ) (t : ℝ) :
+    EuclideanSpace ℂ (Vertex S X) →L[ℂ]
+      EuclideanSpace ℂ (Vertex S X) :=
+  primeCoverAdjacencyEvolution S X t
+
+noncomputable def palomarLocalizationBound (a X : ℕ) : ℝ :=
+  logarithmicWindowLocalizationBound a X
+
+noncomputable def palomarFeshbachRemainderConstant : ℝ :=
+  logarithmicWindowFeshbachRemainderConstant
+
 private theorem palomarArithmeticRankIndex_eq_largePrimeIndex
     {S : Finset ℕ} {X : ℕ} (a : Vertex S X)
     (haY : (a : ℕ) ≤ Nat.sqrt X)
@@ -140,5 +178,49 @@ theorem palomar_top_finite_prime_sum :
   have hroot := hX (palomarRootVertex X hXpos) (by simpa using hwindow)
   simpa [palomarLargestEigenvalue, allowedPrimeCount_empty,
     centerPrimeCorrection_one] using hroot
+
+theorem palomar_uniform_explicit_frequency_dynamics
+    (S : Finset ℕ) (hS : ∀ p ∈ S, p.Prime)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ X : ℕ in atTop, ∀ a : Vertex S X,
+      InLogarithmicCenterWindow ε X (a : ℕ) →
+        0 ≤ (allowedPrimeCount S (X / (a : ℕ)) : ℝ) +
+            palomarFirstExitCorrection S X a ∧
+          ∀ t : ℝ,
+            ‖palomarPrimeCoverEvolution S X t
+                  (palomarPrimeStarCentre S X a) -
+                ((Real.cos (palomarApproximateFrequency S X a * t) : ℂ) •
+                    palomarPrimeStarCentre S X a -
+                  (Complex.I *
+                      Real.sin (palomarApproximateFrequency S X a * t)) •
+                    palomarPrimeStarShell S X a)‖ ≤
+              4 * palomarLocalizationBound (a : ℕ) X +
+                2 * |t| *
+                  ((palomarFeshbachRemainderConstant *
+                      ((a : ℝ) ^ 2 / Real.log (X : ℝ))) /
+                    (palomarLambdaAtArithmeticRank a +
+                      palomarApproximateFrequency S X a)) := by
+  have hdynamics :=
+    eventually_logarithmicWindow_starPair_dynamics_with_actualCorrection
+      S hS hε
+  have hranked := eventually_logarithmicWindow_ranked_actualCorrection_proved
+    S hS hε 1 zero_lt_one
+  filter_upwards [hdynamics, hranked] with X hdynamicsX hrankedX
+  intro a ha
+  obtain ⟨haY, hd, _sigma, _hsigma, hF, hbound⟩ := hdynamicsX a ha
+  obtain ⟨haY', hd', hrank, _hrem⟩ := hrankedX a ha
+  have hhaY : haY' = haY := Subsingleton.elim _ _
+  subst haY'
+  have hhd : hd' = hd := Subsingleton.elim _ _
+  subst hd'
+  have hlam := palomarLambdaAtArithmeticRank_eq a haY hd hrank
+  refine ⟨?_, ?_⟩
+  · simpa [palomarFirstExitCorrection] using hF
+  · intro t
+    simpa [palomarFirstExitCorrection, palomarApproximateFrequency,
+      logarithmicWindowApproximateFrequency, palomarPrimeStarCentre,
+      palomarPrimeStarShell, palomarPrimeCoverEvolution,
+      palomarLocalizationBound, palomarFeshbachRemainderConstant,
+      hlam] using hbound t
 
 end PrimeStar
