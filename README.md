@@ -36,7 +36,7 @@ largest_eigenvalue(A_X)^2
 ```
 
 The same selected surface also exposes the paper's explicit-frequency
-centre--shell dynamics.  Uniformly in the logarithmic window, the prime-star
+centre--shell dynamics. Uniformly in the logarithmic window, the prime-star
 centre evolves as the corresponding two-level oscillation at frequency
 
 ```text
@@ -44,12 +44,18 @@ sqrt (pi_S(X / a) + first_exit_correction(S, a, X)),
 ```
 
 up to an explicit sum of the eigenvector-localization error and the phase
-error supplied by the finite Feshbach remainder.
+error supplied by the finite Feshbach remainder. The Challenge fixes the
+first-exit correction by its literal up- and down-prime sums, identifies the
+evolution with `exp(-itA)`, and displays the localization and Feshbach
+constants. It also proves that the centre and shell states are unit vectors,
+that their hub coordinates are respectively `1` and `0`, and that the exact
+and approximate frequencies—and hence the quotient denominator—are strictly
+positive on the eventual logarithmic window.
 
 ## Palomar statement surface
 
 - [`PrimeCoverChallenge.lean`](PrimeCoverChallenge.lean) is the single compact,
-  Mathlib-only v2 statement surface.  It contains the general uniform
+  Mathlib-only current statement surface. It contains the general uniform
   eigenvalue theorem, its undeleted root specialization, and the
   explicit-frequency dynamics theorem.
 - [`PrimeCoverSolution.lean`](PrimeCoverSolution.lean) connects the same
@@ -86,8 +92,8 @@ reported axiom footprint is limited to `propext`, `Classical.choice`, and
 `Quot.sound`.
 
 The development also exports the supporting logarithmic-window localization,
-hub-mass, inverse-participation, and exact-eigenfrequency results.  When
-registered, this v2 Challenge is intended to supersede the v1 statement
+hub-mass, inverse-participation, and exact-eigenfrequency results. When
+registered, the corrected Challenge is intended to supersede the v1 statement
 surface as the current Palomar version; the registered v1 record remains an
 immutable historical version.
 

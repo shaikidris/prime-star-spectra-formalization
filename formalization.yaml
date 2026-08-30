@@ -35,8 +35,7 @@ sources:
       The selected declarations formalize the uniform theorem in the
       finite-prime-sum form used by the manuscript's headline, its top-mode
       specialization, and the finite explicit-frequency estimate underlying
-      Corollary 9.9. The same
-      preprint is also available at SSRN 7364645,
+      Corollary 9.9. The same preprint is also available at SSRN 7364645,
       https://doi.org/10.2139/ssrn.7364645.
     license: "CC-BY-4.0"
     author_endorsement: "participated"
@@ -109,15 +108,20 @@ fidelity:
     No mathematical divergence is known for the selected results. The Lean
     eigenvalue statement uses natural cutoffs X, the finite graph's exact
     arithmetic rank, and an epsilon-delta formulation of the manuscript's
-    uniform o(1). The dynamics declaration states the finite explicit bound
-    from which the manuscript's time-window asymptotic follows. The inherited
+    uniform o(1). The dynamics declaration fixes the first-exit correction by
+    literal finite prime sums, identifies the evolution as exp(-itA), displays
+    the localization and Feshbach constants, normalizes the centre and shell
+    states, and proves positivity of both frequencies and their sum. It states
+    the finite explicit bound from which the manuscript's time-window
+    asymptotic follows. The inherited
     substantive source is
     https://github.com/shaikidris/prime-star-spectra-formalization at commit
     e40d375396f2965757600d7e0351ccdb69423c9b. This submitted snapshot is a
     toolchain compatibility port with a definitionally synchronized Palomar
-    Challenge/Solution adapter. Version 2 adds the root specialization and a
-    project-local explicit-frequency dynamics module to that inherited proof
-    cone, and selects all three results in one Comparator entry.
+    Challenge/Solution adapter. The current statement surface adds the root
+    specialization and a project-local explicit-frequency dynamics module to
+    that inherited proof cone, and selects all three results in one Comparator
+    entry.
 
 review:
   status: "self-assessed and machine-checked; independent human expert review pending"
@@ -156,8 +160,13 @@ alignment:
       status: "proved"
       note: >-
         The Challenge states the finite uniform norm bound at frequency
-        sqrt(pi_S(X/a) + M_{S,a,X}). The right-hand side is the sum of the
-        logarithmic-window localization bound and the Lipschitz phase error
+        sqrt(pi_S(X/a) + M_{S,a,X}). It exposes M_{S,a,X} as literal up- and
+        down-prime sums, the evolution as exp(-itA), and the numerical
+        localization and Feshbach constants. The centre and shell states have
+        norm one and hub coordinates one and zero, respectively. Both the
+        ordered eigenfrequency and the approximate frequency are positive, so
+        their sum is a valid denominator. The right-hand side is the sum of
+        the logarithmic-window localization bound and the Lipschitz phase error
         obtained from the source-weighted Feshbach remainder. This is the
         quantitative finite statement underlying the manuscript's o(1)
         dynamics on its stated time scale.
