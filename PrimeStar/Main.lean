@@ -37,6 +37,7 @@ import PrimeStar.FinitePrimeSumHeadline
 import PrimeStar.LogarithmicWindowLocalization
 import PrimeStar.BipartiteSymmetry
 import PrimeStar.LogarithmicWindowDynamics
+import PrimeStar.LogarithmicWindowApproximateDynamics
 import PrimeStar.FiniteRemainderAssembly
 import PrimeStar.CanonicalFirstExitBlocks
 import PrimeStar.AdjacencyEvolution
@@ -118,7 +119,9 @@ eigenvector toward its exact positive star mode with the finite error
 uniformly on the logarithmic window. An exact parity-sign involution
 anticommutes with prime-cover adjacency, supplies the negative partner, and
 upgrades the paired localization to centre--shell adjacency evolution at the
-exact ordered eigenfrequency, uniformly for all real times.
+exact ordered eigenfrequency, uniformly for all real times. The explicit
+first-exit approximation to that frequency is eventually positive and gives
+a standalone uniform finite phase-error bound.
 -/
 
 namespace PrimeStar

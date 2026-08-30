@@ -13,7 +13,7 @@ between `n` and `np` whenever `p ∉ S` is prime. If `a` is an allowed centre,
 P_S(X) = sum_{p ≤ X, p ∉ S} 1 / (p - 1),
 ```
 
-the selected theorem proves, uniformly for
+the selected theorem surface proves, uniformly for
 `a ≤ (log X)^(1/2 - ε)`, that
 
 ```text
@@ -35,16 +35,28 @@ largest_eigenvalue(A_X)^2
   = pi(X) + 4 * sum_{p ≤ X} 1 / (p - 1) + o(1).
 ```
 
+The same selected surface also exposes the paper's explicit-frequency
+centre--shell dynamics.  Uniformly in the logarithmic window, the prime-star
+centre evolves as the corresponding two-level oscillation at frequency
+
+```text
+sqrt (pi_S(X / a) + first_exit_correction(S, a, X)),
+```
+
+up to an explicit sum of the eigenvector-localization error and the phase
+error supplied by the finite Feshbach remainder.
+
 ## Palomar statement surface
 
-- [`PrimeCoverChallenge.lean`](PrimeCoverChallenge.lean) is the compact,
-  Mathlib-only statement surface.
+- [`PrimeCoverChallenge.lean`](PrimeCoverChallenge.lean) is the single compact,
+  Mathlib-only v2 statement surface.  It contains the general uniform
+  eigenvalue theorem, its undeleted root specialization, and the
+  explicit-frequency dynamics theorem.
 - [`PrimeCoverSolution.lean`](PrimeCoverSolution.lean) connects the same
   declaration to the full proof development in [`PrimeStar/`](PrimeStar/).
-- [`prime-cover-comparator.json`](prime-cover-comparator.json) selects
-  `PrimeStar.palomar_top_finite_prime_sum`,
-  `PrimeStar.palomar_uniform_finite_prime_sum`, and their visible
-  finite-prime-sum/largest-eigenvalue definitions for Comparator and NanoDa
+- [`prime-cover-comparator.json`](prime-cover-comparator.json) selects all three
+  advertised declarations and their visible finite-prime-sum, star-state,
+  evolution, frequency, and error definitions for Comparator and NanoDa
   checking.
 - [`formalization.yaml`](formalization.yaml) records authorship, provenance,
   theorem alignment, automation, and the permitted axiom footprint.
@@ -73,10 +85,11 @@ The selected public theorems have no `sorry`, `admit`, or project axiom. Their
 reported axiom footprint is limited to `propext`, `Classical.choice`, and
 `Quot.sound`.
 
-The development also exports uniform logarithmic-window localization,
-hub-mass, inverse-participation, and exact-frequency centre--shell dynamics
-theorems. They remain part of the audited repository but are not duplicated
-as additional Mathlib-only Palomar challenge statements in this version.
+The development also exports the supporting logarithmic-window localization,
+hub-mass, inverse-participation, and exact-eigenfrequency results.  When
+registered, this v2 Challenge is intended to supersede the v1 statement
+surface as the current Palomar version; the registered v1 record remains an
+immutable historical version.
 
 ## Paper
 
