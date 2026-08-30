@@ -221,8 +221,47 @@ theorem palomar_uniform_explicit_frequency_dynamics
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ X : ℕ in atTop, ∀ a : Vertex S X,
       InLogarithmicCenterWindow ε X (a : ℕ) →
-        0 ≤ (allowedPrimeCount S (X / (a : ℕ)) : ℝ) +
-            palomarFirstExitCorrection S X a ∧
+        palomarFirstExitCorrection S X a =
+            (let c := (a : ℕ)
+             let d := (allowedPrimeCount S (X / c) : ℝ) -
+               (allowedPrimeCount S (Nat.sqrt X) : ℝ)
+             (∑ q ∈ (Nat.primesLE (Nat.sqrt X)).filter (fun q ↦ q ∉ S),
+                 let r := if c * q ≤ Nat.sqrt X then
+                   ((allowedPrimeCount S (X / (c * q)) : ℝ) -
+                       (allowedPrimeCount S (Nat.sqrt X) : ℝ)) / d
+                 else 0
+                 4 * r / (1 - r)) +
+               ∑ q ∈ c.primeFactors,
+                 let s := ((allowedPrimeCount S (X / (c / q)) : ℝ) -
+                     (allowedPrimeCount S (Nat.sqrt X) : ℝ)) / d
+                 (5 - s) / (1 - s)) ∧
+          palomarPrimeCoverEvolution S X =
+            (fun t : ℝ ↦ NormedSpace.exp ((-((t : ℂ) * Complex.I)) •
+              LinearMap.toContinuousLinearMap
+                (Matrix.toEuclideanLin
+                  ((primeCoverGraph S X).adjMatrix ℂ)))) ∧
+          palomarLocalizationBound (a : ℕ) X =
+            (let K := 12 * Real.log 4 + 2 / Real.log 2 + 16
+             let eta := K *
+               (Real.sqrt ((Nat.sqrt X + 1 : ℕ) : ℝ) /
+                 Real.sqrt (Real.log ((Nat.sqrt X + 1 : ℕ) : ℝ)))
+             let gamma := (96 * (((a : ℕ) + 1 : ℕ) : ℝ))⁻¹ *
+               Real.sqrt ((X : ℝ) /
+                 (((a : ℕ) : ℝ) * Real.log (X : ℝ)))
+             4 * eta / (gamma - 2 * eta)) ∧
+          palomarFeshbachRemainderConstant =
+            (let K := 12 * Real.log 4 + 2 / Real.log 2 + 16
+             let E := 640000000 * K ^ 2
+             let D := 48 * (80000000 : ℝ) ^ 2
+             528 * 768 * E + 1280 * (D + E) + 1600 * E) ∧
+          ‖palomarPrimeStarCentre S X a‖ = 1 ∧
+          ‖palomarPrimeStarShell S X a‖ = 1 ∧
+          palomarPrimeStarCentre S X a a = 1 ∧
+          palomarPrimeStarShell S X a a = 0 ∧
+          0 < palomarLambdaAtArithmeticRank a ∧
+          0 < palomarApproximateFrequency S X a ∧
+          0 < palomarLambdaAtArithmeticRank a +
+            palomarApproximateFrequency S X a ∧
           ∀ t : ℝ,
             ‖palomarPrimeCoverEvolution S X t
                   (palomarPrimeStarCentre S X a) -

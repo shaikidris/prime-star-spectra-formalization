@@ -179,13 +179,110 @@ theorem palomar_top_finite_prime_sum :
   simpa [palomarLargestEigenvalue, allowedPrimeCount_empty,
     centerPrimeCorrection_one] using hroot
 
+private theorem largePrimeNormalizedStarMode_apply_center_exact
+    {S : Finset ℕ} {X Y : ℕ} (a : Vertex S X) (sign : ℝ)
+    (hsign : sign ^ 2 = 1)
+    (hd : 0 < largePrimeStarDegree S X Y a) :
+    largePrimeNormalizedStarMode S X Y a sign a = (Real.sqrt 2)⁻¹ := by
+  let u := largePrimeEuclideanStarVector S X Y a sign
+  let d : ℝ := largePrimeStarDegree S X Y a
+  have huSq : ‖u‖ ^ 2 = 2 * d := by
+    simpa [u, d] using
+      (norm_sq_largePrimeEuclideanStarVector (S := S) (X := X)
+        (Y := Y) (c := a) hsign)
+  have huNorm : ‖u‖ = Real.sqrt (2 * d) := by
+    rw [← Real.sqrt_sq (norm_nonneg u), huSq]
+  have hua : u a = Real.sqrt d := by
+    simp [u, d, largePrimeEuclideanStarVector,
+      largePrimeSignedStarVector]
+  have hdPos : 0 < d := by
+    dsimp [d]
+    exact_mod_cast hd
+  have hsqrtD : Real.sqrt d ≠ 0 := (Real.sqrt_pos.2 hdPos).ne'
+  have hsqrtTwo : Real.sqrt 2 ≠ 0 :=
+    (Real.sqrt_pos.2 (by norm_num)).ne'
+  rw [largePrimeNormalizedStarMode, NormedSpace.normalize]
+  change ‖u‖⁻¹ * u a = _
+  rw [huNorm, hua, Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2)]
+  field_simp
+
+private theorem palomarPrimeStarCentre_apply_center
+    {S : Finset ℕ} {X : ℕ} (a : Vertex S X)
+    (hd : 0 < largePrimeStarDegree S X (Nat.sqrt X) a) :
+    palomarPrimeStarCentre S X a a = 1 := by
+  have hplus := largePrimeNormalizedStarMode_apply_center_exact
+    a (1 : ℝ) (by norm_num) hd
+  have hminus := largePrimeNormalizedStarMode_apply_center_exact
+    a (-1 : ℝ) (by norm_num) hd
+  rw [palomarPrimeStarCentre, normalizedPairCentre]
+  simp only [PiLp.smul_apply, PiLp.add_apply, complexifyEuclidean_apply,
+    hplus, hminus]
+  have hsqrtTwo : Real.sqrt 2 ≠ 0 :=
+    (Real.sqrt_pos.2 (by norm_num)).ne'
+  have hsqrtTwoSq : ((Real.sqrt 2 : ℂ)) ^ 2 = 2 := by
+    exact_mod_cast (Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2))
+  rw [smul_eq_mul]
+  push_cast
+  field_simp
+  simpa only [one_add_one_eq_two] using hsqrtTwoSq.symm
+
+private theorem palomarPrimeStarShell_apply_center
+    {S : Finset ℕ} {X : ℕ} (a : Vertex S X)
+    (hd : 0 < largePrimeStarDegree S X (Nat.sqrt X) a) :
+    palomarPrimeStarShell S X a a = 0 := by
+  have hplus := largePrimeNormalizedStarMode_apply_center_exact
+    a (1 : ℝ) (by norm_num) hd
+  have hminus := largePrimeNormalizedStarMode_apply_center_exact
+    a (-1 : ℝ) (by norm_num) hd
+  rw [palomarPrimeStarShell, normalizedPairShell]
+  simp [hplus, hminus]
+
 theorem palomar_uniform_explicit_frequency_dynamics
     (S : Finset ℕ) (hS : ∀ p ∈ S, p.Prime)
     {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ X : ℕ in atTop, ∀ a : Vertex S X,
       InLogarithmicCenterWindow ε X (a : ℕ) →
-        0 ≤ (allowedPrimeCount S (X / (a : ℕ)) : ℝ) +
-            palomarFirstExitCorrection S X a ∧
+        palomarFirstExitCorrection S X a =
+            (let c := (a : ℕ)
+             let d := (allowedPrimeCount S (X / c) : ℝ) -
+               (allowedPrimeCount S (Nat.sqrt X) : ℝ)
+             (∑ q ∈ (Nat.primesLE (Nat.sqrt X)).filter (fun q ↦ q ∉ S),
+                 let r := if c * q ≤ Nat.sqrt X then
+                   ((allowedPrimeCount S (X / (c * q)) : ℝ) -
+                       (allowedPrimeCount S (Nat.sqrt X) : ℝ)) / d
+                 else 0
+                 4 * r / (1 - r)) +
+               ∑ q ∈ c.primeFactors,
+                 let s := ((allowedPrimeCount S (X / (c / q)) : ℝ) -
+                     (allowedPrimeCount S (Nat.sqrt X) : ℝ)) / d
+                 (5 - s) / (1 - s)) ∧
+          palomarPrimeCoverEvolution S X =
+            (fun t : ℝ ↦ NormedSpace.exp ((-((t : ℂ) * Complex.I)) •
+              LinearMap.toContinuousLinearMap
+                (Matrix.toEuclideanLin
+                  ((primeCoverGraph S X).adjMatrix ℂ)))) ∧
+          palomarLocalizationBound (a : ℕ) X =
+            (let K := 12 * Real.log 4 + 2 / Real.log 2 + 16
+             let eta := K *
+               (Real.sqrt ((Nat.sqrt X + 1 : ℕ) : ℝ) /
+                 Real.sqrt (Real.log ((Nat.sqrt X + 1 : ℕ) : ℝ)))
+             let gamma := (96 * (((a : ℕ) + 1 : ℕ) : ℝ))⁻¹ *
+               Real.sqrt ((X : ℝ) /
+                 (((a : ℕ) : ℝ) * Real.log (X : ℝ)))
+             4 * eta / (gamma - 2 * eta)) ∧
+          palomarFeshbachRemainderConstant =
+            (let K := 12 * Real.log 4 + 2 / Real.log 2 + 16
+             let E := 640000000 * K ^ 2
+             let D := 48 * (80000000 : ℝ) ^ 2
+             528 * 768 * E + 1280 * (D + E) + 1600 * E) ∧
+          ‖palomarPrimeStarCentre S X a‖ = 1 ∧
+          ‖palomarPrimeStarShell S X a‖ = 1 ∧
+          palomarPrimeStarCentre S X a a = 1 ∧
+          palomarPrimeStarShell S X a a = 0 ∧
+          0 < palomarLambdaAtArithmeticRank a ∧
+          0 < palomarApproximateFrequency S X a ∧
+          0 < palomarLambdaAtArithmeticRank a +
+            palomarApproximateFrequency S X a ∧
           ∀ t : ℝ,
             ‖palomarPrimeCoverEvolution S X t
                   (palomarPrimeStarCentre S X a) -
@@ -205,17 +302,37 @@ theorem palomar_uniform_explicit_frequency_dynamics
       S hS hε
   have hranked := eventually_logarithmicWindow_ranked_actualCorrection_proved
     S hS hε 1 zero_lt_one
-  filter_upwards [hdynamics, hranked] with X hdynamicsX hrankedX
+  have hfrequency :=
+    eventually_logarithmicWindow_actualCorrection_frequency_bound S hS hε
+  filter_upwards [hdynamics, hranked, hfrequency] with
+      X hdynamicsX hrankedX hfrequencyX
   intro a ha
-  obtain ⟨haY, hd, _sigma, _hsigma, hF, hbound⟩ := hdynamicsX a ha
+  obtain ⟨haY, hd, _sigma, _hsigma, _hF, hbound⟩ := hdynamicsX a ha
   obtain ⟨haY', hd', hrank, _hrem⟩ := hrankedX a ha
   have hhaY : haY' = haY := Subsingleton.elim _ _
   subst haY'
   have hhd : hd' = hd := Subsingleton.elim _ _
   subst hd'
   have hlam := palomarLambdaAtArithmeticRank_eq a haY hd hrank
-  refine ⟨?_, ?_⟩
-  · simpa [palomarFirstExitCorrection] using hF
+  obtain ⟨hlamPos, hFPos, _hfrequencyBound⟩ := hfrequencyX a ha haY hd
+  have hhatPos : 0 < palomarApproximateFrequency S X a := by
+    rw [palomarApproximateFrequency, logarithmicWindowApproximateFrequency]
+    exact Real.sqrt_pos.2 hFPos
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hhatPos, ?_, ?_⟩
+  · rfl
+  · rfl
+  · rfl
+  · rfl
+  · simpa [palomarPrimeStarCentre] using
+      norm_normalizedPairCentre_largePrimeStarModes hd
+  · simpa [palomarPrimeStarShell] using
+      norm_normalizedPairShell_largePrimeStarModes hd
+  · exact palomarPrimeStarCentre_apply_center a hd
+  · exact palomarPrimeStarShell_apply_center a hd
+  · simpa [hlam] using hlamPos
+  · have : 0 < palomarLambdaAtArithmeticRank a := by
+      simpa [hlam] using hlamPos
+    linarith
   · intro t
     simpa [palomarFirstExitCorrection, palomarApproximateFrequency,
       logarithmicWindowApproximateFrequency, palomarPrimeStarCentre,
