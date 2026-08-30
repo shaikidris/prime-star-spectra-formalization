@@ -2,10 +2,12 @@
   "challenge_module": "PrimeCoverChallenge",
   "solution_module": "PrimeCoverSolution",
   "theorem_names": [
-    "PrimeStar.palomar_uniform_finite_prime_sum"
+    "PrimeStar.palomar_uniform_finite_prime_sum",
+    "PrimeStar.palomar_top_finite_prime_sum"
   ],
   "definition_names": [
-    "PrimeStar.palomarAllowedPrimeInvSubOneSum"
+    "PrimeStar.palomarAllowedPrimeInvSubOneSum",
+    "PrimeStar.palomarLargestEigenvalue"
   ],
   "permitted_axioms": [
     "propext",

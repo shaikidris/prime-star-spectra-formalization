@@ -28,6 +28,13 @@ constant, the finite star decomposition, spectral matching, first-exit
 resolvent identities, eigenvector localization, and centre–shell adjacency
 evolution.
 
+Its root-centred specialization is the paper's most readable headline:
+
+```text
+largest_eigenvalue(A_X)^2
+  = pi(X) + 4 * sum_{p ≤ X} 1 / (p - 1) + o(1).
+```
+
 ## Palomar statement surface
 
 - [`PrimeCoverChallenge.lean`](PrimeCoverChallenge.lean) is the compact,
@@ -35,8 +42,10 @@ evolution.
 - [`PrimeCoverSolution.lean`](PrimeCoverSolution.lean) connects the same
   declaration to the full proof development in [`PrimeStar/`](PrimeStar/).
 - [`prime-cover-comparator.json`](prime-cover-comparator.json) selects
-  `PrimeStar.palomar_uniform_finite_prime_sum` and its finite-prime-sum
-  definition for Comparator and NanoDa checking.
+  `PrimeStar.palomar_top_finite_prime_sum`,
+  `PrimeStar.palomar_uniform_finite_prime_sum`, and their visible
+  finite-prime-sum/largest-eigenvalue definitions for Comparator and NanoDa
+  checking.
 - [`formalization.yaml`](formalization.yaml) records authorship, provenance,
   theorem alignment, automation, and the permitted axiom footprint.
 - [`SOURCE_PROVENANCE.md`](SOURCE_PROVENANCE.md) records the substantive
@@ -60,9 +69,14 @@ lake build PrimeCoverChallenge PrimeCoverSolution
 lake build PrimeStar.Main PrimeStar.Audit
 ```
 
-The selected public theorem has no `sorry`, `admit`, or project axiom. Its
+The selected public theorems have no `sorry`, `admit`, or project axiom. Their
 reported axiom footprint is limited to `propext`, `Classical.choice`, and
 `Quot.sound`.
+
+The development also exports uniform logarithmic-window localization,
+hub-mass, inverse-participation, and exact-frequency centre--shell dynamics
+theorems. They remain part of the audited repository but are not duplicated
+as additional Mathlib-only Palomar challenge statements in this version.
 
 ## Paper
 

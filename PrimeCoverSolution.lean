@@ -37,6 +37,16 @@ noncomputable def palomarLambdaAtArithmeticRank
   (palomarAdjacency_isSymmetric S X).eigenvalues rfl
     (palomarArithmeticRankIndex a)
 
+def palomarRootVertex (X : ℕ) (hX : 1 ≤ X) : Vertex ∅ X :=
+  ⟨⟨1, Nat.lt_succ_iff.mpr hX⟩, by simp⟩
+
+@[simp]
+theorem palomarRootVertex_coe (X : ℕ) (hX : 1 ≤ X) :
+    (palomarRootVertex X hX : ℕ) = 1 := rfl
+
+noncomputable def palomarLargestEigenvalue (X : ℕ) (hX : 1 ≤ X) : ℝ :=
+  palomarLambdaAtArithmeticRank (palomarRootVertex X hX)
+
 private theorem palomarArithmeticRankIndex_eq_largePrimeIndex
     {S : Finset ℕ} {X : ℕ} (a : Vertex S X)
     (haY : (a : ℕ) ≤ Nat.sqrt X)
@@ -105,5 +115,30 @@ theorem palomar_uniform_finite_prime_sum
     4 * finiteAllowedPrimeInvSubOneSum S X -
     centerPrimeCorrection (a : ℕ)| < δ
   exact hbound
+
+private theorem eventually_root_in_logarithmicWindow :
+    ∀ᶠ X : ℕ in atTop,
+      InLogarithmicCenterWindow (1 / 4 : ℝ) X 1 := by
+  have hlogTop : Tendsto (fun X : ℕ ↦ Real.log (X : ℝ)) atTop atTop :=
+    Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
+  have hlogOne : ∀ᶠ X : ℕ in atTop, 1 ≤ Real.log (X : ℝ) :=
+    hlogTop.eventually (Ici_mem_atTop 1)
+  filter_upwards [hlogOne] with X hX
+  refine ⟨by norm_num, ?_⟩
+  simpa using Real.one_le_rpow hX (by norm_num : (0 : ℝ) ≤ 1 / 2 - 1 / 4)
+
+theorem palomar_top_finite_prime_sum :
+    ∀ δ > 0, ∀ᶠ X : ℕ in atTop, ∀ hX : 1 ≤ X,
+      |(palomarLargestEigenvalue X hX) ^ 2
+        - (Nat.primeCounting X : ℝ)
+        - 4 * palomarAllowedPrimeInvSubOneSum ∅ X| < δ := by
+  intro δ hδ
+  have hmain := palomar_uniform_finite_prime_sum
+    ∅ (by simp) (ε := (1 / 4 : ℝ)) (by norm_num) δ hδ
+  filter_upwards [hmain, eventually_root_in_logarithmicWindow] with X hX hwindow
+  intro hXpos
+  have hroot := hX (palomarRootVertex X hXpos) (by simpa using hwindow)
+  simpa [palomarLargestEigenvalue, allowedPrimeCount_empty,
+    centerPrimeCorrection_one] using hroot
 
 end PrimeStar
